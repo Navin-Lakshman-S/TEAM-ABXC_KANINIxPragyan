@@ -8,7 +8,9 @@
 </p>
 
 <h1 align="center">VIGIL</h1>
-<h3 align="center">AI-Powered Smart Patient Triage System</h3>
+<h3 align="center">VIGIL: Vital Intelligence for Guided Intervention & Logistics</h3>
+<h4 align="center">AI - Powered Smart Triage System</h4>
+
 
 <p align="center">
   <em>An intelligent healthcare triage platform that combines machine learning, explainable AI, and real-time monitoring to help emergency departments make faster, fairer, and more transparent patient prioritization decisions.</em>
