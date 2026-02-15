@@ -2,19 +2,29 @@
 Smart Patient Triage — FastAPI Application
 ---------------------------------------------
 Brings together the AI engine, services, and API routes into a
-single ASGI application with CORS, WebSocket support, and
-automatic OpenAPI docs.
+single ASGI application with CORS, structured logging,
+and automatic OpenAPI docs.
 """
 
-import asyncio
-import json
+import os
+import logging
+import time
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 
 from backend.api.routes import router as triage_router
-from backend.services.wearable_sim import get_or_create_stream, remove_stream
+
+
+# ── Structured Logging ────────────────────────────────────────────────
+LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO").upper()
+logging.basicConfig(
+    level=getattr(logging, LOG_LEVEL, logging.INFO),
+    format="%(asctime)s | %(levelname)-7s | %(name)s | %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+)
+logger = logging.getLogger("vigil")
 
 
 @asynccontextmanager
@@ -22,11 +32,16 @@ async def lifespan(app: FastAPI):
     # Startup — preload the ML model so first request isn't slow
     from backend.ai_engine import predictor
     predictor._load()
-    print("Triage model loaded and ready.")
+    logger.info("ML model loaded and ready — Vigil is operational")
     yield
     # Shutdown
-    print("Shutting down.")
+    logger.info("Vigil shutting down gracefully")
 
+
+ALLOWED_ORIGINS = os.getenv(
+    "CORS_ORIGINS",
+    "http://localhost:3000,http://127.0.0.1:3000",
+).split(",")
 
 app = FastAPI(
     title="Vigil — Smart Patient Triage System",
@@ -38,56 +53,38 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# CORS — allow the Next.js frontend
+# CORS — configurable via env
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+
+# ── Request Logging Middleware ────────────────────────────────────────
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    start = time.perf_counter()
+    response = await call_next(request)
+    elapsed = (time.perf_counter() - start) * 1000
+    logger.info(
+        "%s %s → %s (%.1fms)",
+        request.method, request.url.path, response.status_code, elapsed,
+    )
+    return response
+
+
 # Mount REST routes
 app.include_router(triage_router, prefix="/api")
-
-
-# ── WebSocket: Wearable vitals stream ────────────────────────────────
-@app.websocket("/ws/vitals/{patient_id}")
-async def vitals_ws(websocket: WebSocket, patient_id: str):
-    """
-    Real‑time smartwatch vitals feed.
-
-    Query params (optional):
-      - base_hr: baseline heart rate (default 75)
-      - base_spo2: baseline SpO2 (default 97)
-      - risk_level: Low / Medium / High (affects deterioration rate)
-    """
-    await websocket.accept()
-
-    params = websocket.query_params
-    base_hr = float(params.get("base_hr", 75))
-    base_spo2 = float(params.get("base_spo2", 97))
-    risk_level = params.get("risk_level", "Low")
-
-    stream = get_or_create_stream(
-        patient_id=patient_id,
-        base_hr=base_hr,
-        base_spo2=base_spo2,
-        risk_level=risk_level,
-    )
-
-    try:
-        while True:
-            reading = stream.next_reading()
-            await websocket.send_text(json.dumps(reading))
-            await asyncio.sleep(2)  # one reading every 2 seconds
-    except WebSocketDisconnect:
-        remove_stream(patient_id)
-    except Exception:
-        remove_stream(patient_id)
 
 
 # ── Health check ──────────────────────────────────────────────────────
 @app.get("/health")
 async def health():
-    return {"status": "ok", "service": "Vigil"}
+    return {
+        "status": "ok",
+        "service": "Vigil",
+        "version": "1.0.0",
+    }

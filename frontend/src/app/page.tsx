@@ -12,6 +12,7 @@ import {
   BrainCircuit, CheckCircle2, HeartPulse, Clock, ArrowUpRight, Shield,
 } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
+import { useTheme } from "@/lib/theme";
 
 /* ---------- Simulated chart data generators ---------- */
 
@@ -44,14 +45,19 @@ function generateVitalsTrend() {
   return points;
 }
 
-const RISK_COLORS: Record<string, string> = { High: "#ff073a", Medium: "#ffdd00", Low: "#39ff14" };
+const RISK_COLORS: Record<string, string> = { High: "#ff2a6d", Medium: "#ffd60a", Low: "#05ffa1" };
 const RISK_GRADIENTS: Record<string, string> = { High: "from-red-500 to-rose-600", Medium: "from-amber-400 to-orange-500", Low: "from-emerald-400 to-green-500" };
 
-const tooltipStyle = {
-  backgroundColor: "rgba(15, 23, 42, 0.95)", backdropFilter: "blur(12px)",
-  border: "1px solid rgba(255,255,255,0.1)", borderRadius: "12px", fontSize: "12px",
-  boxShadow: "0 8px 32px -8px rgba(0,0,0,0.5)", padding: "8px 12px", color: "#e2e8f0",
-};
+function getTooltipStyle(isDark: boolean) {
+  return {
+    backgroundColor: isDark ? "rgba(15, 23, 42, 0.95)" : "rgba(255, 255, 255, 0.95)",
+    backdropFilter: "blur(12px)",
+    border: isDark ? "1px solid rgba(255,255,255,0.1)" : "1px solid rgba(0,0,0,0.08)",
+    borderRadius: "12px", fontSize: "12px",
+    boxShadow: isDark ? "0 8px 32px -8px rgba(0,0,0,0.5)" : "0 8px 32px -8px rgba(0,0,0,0.12)",
+    padding: "8px 12px", color: isDark ? "#e2e8f0" : "#1e293b",
+  };
+}
 
 function StatCard({ icon, label, value, accent, trend }: {
   icon: React.ReactNode; label: string; value: number | string; accent: string; trend?: string;
@@ -82,6 +88,11 @@ function StatCard({ icon, label, value, accent, trend }: {
 
 export default function DashboardPage() {
   const { t } = useI18n();
+  const { isDark } = useTheme();
+  const tooltipStyle = getTooltipStyle(isDark);
+  const axisColor = isDark ? "#64748b" : "#475569";
+  const gridColor = isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)";
+  const legendColor = isDark ? "#94a3b8" : "#64748b";
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [metrics, setMetrics] = useState<ModelMetrics | null>(null);
   const [loading, setLoading] = useState(true);
@@ -155,7 +166,7 @@ export default function DashboardPage() {
                     {riskPieData.map((entry) => <Cell key={entry.name} fill={RISK_COLORS[entry.name] || "#94a3b8"} />)}
                   </Pie>
                   <Tooltip contentStyle={tooltipStyle} />
-                  <Legend wrapperStyle={{ fontSize: "12px", paddingTop: "12px", color: "#94a3b8" }} />
+                  <Legend wrapperStyle={{ fontSize: "12px", paddingTop: "12px", color: legendColor }} />
                 </PieChart>
               </ResponsiveContainer>
             </div>
@@ -170,10 +181,10 @@ export default function DashboardPage() {
             <div className="h-60">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={deptBarData} layout="vertical">
-                  <defs><linearGradient id="blueGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stopColor="#00d4ff" /><stop offset="100%" stopColor="#7b2dff" /></linearGradient></defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" horizontal={false} />
-                  <XAxis type="number" stroke="#64748b" fontSize={11} tickLine={false} axisLine={false} />
-                  <YAxis dataKey="name" type="category" stroke="#64748b" fontSize={11} width={110} tickLine={false} axisLine={false} />
+                  <defs><linearGradient id="blueGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stopColor="#00f0ff" /><stop offset="100%" stopColor="#bf5af2" /></linearGradient></defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke={gridColor} horizontal={false} />
+                  <XAxis type="number" stroke={axisColor} fontSize={11} tickLine={false} axisLine={false} />
+                  <YAxis dataKey="name" type="category" stroke={axisColor} fontSize={11} width={110} tickLine={false} axisLine={false} />
                   <Tooltip contentStyle={tooltipStyle} />
                   <Bar dataKey="patients" fill="url(#blueGrad)" radius={[0, 8, 8, 0]} barSize={20} />
                 </BarChart>
@@ -194,16 +205,16 @@ export default function DashboardPage() {
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={activityData}>
                 <defs>
-                  <linearGradient id="gradArr" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor="#00d4ff" stopOpacity={0.3} /><stop offset="95%" stopColor="#00d4ff" stopOpacity={0} /></linearGradient>
-                  <linearGradient id="gradWait" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor="#ffdd00" stopOpacity={0.3} /><stop offset="95%" stopColor="#ffdd00" stopOpacity={0} /></linearGradient>
+                  <linearGradient id="gradArr" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor="#00f0ff" stopOpacity={0.3} /><stop offset="95%" stopColor="#00f0ff" stopOpacity={0} /></linearGradient>
+                  <linearGradient id="gradWait" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor="#ffd60a" stopOpacity={0.3} /><stop offset="95%" stopColor="#ffd60a" stopOpacity={0} /></linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
-                <XAxis dataKey="hour" stroke="#64748b" fontSize={10} tickLine={false} axisLine={false} interval={2} />
-                <YAxis stroke="#64748b" fontSize={11} tickLine={false} axisLine={false} />
-                <Tooltip contentStyle={tooltipStyle} /><Legend wrapperStyle={{ fontSize: "11px", paddingTop: "8px", color: "#94a3b8" }} />
-                <Area type="monotone" dataKey="arrivals" stroke="#00d4ff" fill="url(#gradArr)" strokeWidth={2.5} name="Arrivals" />
-                <Area type="monotone" dataKey="discharges" stroke="#39ff14" fill="none" strokeWidth={2.5} strokeDasharray="4 2" name="Discharges" />
-                <Area type="monotone" dataKey="waiting" stroke="#ffdd00" fill="url(#gradWait)" strokeWidth={2.5} name="Waiting" />
+                <CartesianGrid strokeDasharray="3 3" stroke={gridColor} />
+                <XAxis dataKey="hour" stroke={axisColor} fontSize={10} tickLine={false} axisLine={false} interval={2} />
+                <YAxis stroke={axisColor} fontSize={11} tickLine={false} axisLine={false} />
+                <Tooltip contentStyle={tooltipStyle} /><Legend wrapperStyle={{ fontSize: "11px", paddingTop: "8px", color: legendColor }} />
+                <Area type="monotone" dataKey="arrivals" stroke="#00f0ff" fill="url(#gradArr)" strokeWidth={2.5} name="Arrivals" />
+                <Area type="monotone" dataKey="discharges" stroke="#05ffa1" fill="none" strokeWidth={2.5} strokeDasharray="4 2" name="Discharges" />
+                <Area type="monotone" dataKey="waiting" stroke="#ffd60a" fill="url(#gradWait)" strokeWidth={2.5} name="Waiting" />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -218,14 +229,14 @@ export default function DashboardPage() {
           <div className="h-56">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={vitalsData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
-                <XAxis dataKey="t" stroke="#64748b" fontSize={10} tickLine={false} axisLine={false} interval={4} />
-                <YAxis stroke="#64748b" fontSize={11} tickLine={false} axisLine={false} />
-                <Tooltip contentStyle={tooltipStyle} /><Legend wrapperStyle={{ fontSize: "11px", paddingTop: "8px", color: "#94a3b8" }} />
-                <Line type="monotone" dataKey="HR" stroke="#ff6b00" strokeWidth={2.5} dot={false} name="Heart Rate" />
-                <Line type="monotone" dataKey="SpO2" stroke="#39ff14" strokeWidth={2.5} dot={false} name="SpO2" />
-                <Line type="monotone" dataKey="BPSys" stroke="#00d4ff" strokeWidth={2.5} dot={false} name="BP Systolic" />
-                <Line type="monotone" dataKey="RiskIdx" stroke="#ff073a" strokeWidth={2} strokeDasharray="5 3" dot={false} name="Risk Index" />
+                <CartesianGrid strokeDasharray="3 3" stroke={gridColor} />
+                <XAxis dataKey="t" stroke={axisColor} fontSize={10} tickLine={false} axisLine={false} interval={4} />
+                <YAxis stroke={axisColor} fontSize={11} tickLine={false} axisLine={false} />
+                <Tooltip contentStyle={tooltipStyle} /><Legend wrapperStyle={{ fontSize: "11px", paddingTop: "8px", color: legendColor }} />
+                <Line type="monotone" dataKey="HR" stroke="#ff6ac1" strokeWidth={2.5} dot={false} name="Heart Rate" />
+                <Line type="monotone" dataKey="SpO2" stroke="#05ffa1" strokeWidth={2.5} dot={false} name="SpO2" />
+                <Line type="monotone" dataKey="BPSys" stroke="#00f0ff" strokeWidth={2.5} dot={false} name="BP Systolic" />
+                <Line type="monotone" dataKey="RiskIdx" stroke="#ff2a6d" strokeWidth={2} strokeDasharray="5 3" dot={false} name="Risk Index" />
               </LineChart>
             </ResponsiveContainer>
           </div>

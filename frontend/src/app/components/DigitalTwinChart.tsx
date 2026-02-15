@@ -1,5 +1,6 @@
 "use client";
 
+import { useTheme } from "@/lib/theme";
 import {
   LineChart,
   Line,
@@ -28,6 +29,10 @@ export function DigitalTwinChart({
   timeline,
   escalationPoint,
 }: DigitalTwinChartProps) {
+  const { isDark } = useTheme();
+  const axisColor = isDark ? "#64748b" : "#475569";
+  const gridColor = isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)";
+
   const data = timeline.map((step) => ({
     time: `${step.time_minutes}m`,
     minutes: step.time_minutes,
@@ -41,36 +46,37 @@ export function DigitalTwinChart({
     <div className="w-full h-72">
       <ResponsiveContainer width="100%" height="100%">
         <LineChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+          <CartesianGrid strokeDasharray="3 3" stroke={gridColor} />
           <XAxis
             dataKey="time"
-            stroke="#64748b"
+            stroke={axisColor}
             fontSize={11}
             tickLine={false}
           />
-          <YAxis stroke="#64748b" fontSize={11} tickLine={false} />
+          <YAxis stroke={axisColor} fontSize={11} tickLine={false} />
           <Tooltip
             contentStyle={{
-              backgroundColor: "rgba(255, 255, 255, 0.85)",
+              backgroundColor: isDark ? "rgba(15, 23, 42, 0.95)" : "rgba(255, 255, 255, 0.95)",
               backdropFilter: "blur(12px)",
-              border: "1px solid rgba(226, 232, 240, 0.8)",
+              border: isDark ? "1px solid rgba(255,255,255,0.1)" : "1px solid rgba(0,0,0,0.08)",
               borderRadius: "12px",
               fontSize: "12px",
-              boxShadow: "0 8px 30px -8px rgba(0,0,0,0.08)",
+              boxShadow: isDark ? "0 8px 32px -8px rgba(0,0,0,0.5)" : "0 8px 30px -8px rgba(0,0,0,0.1)",
+              color: isDark ? "#e2e8f0" : "#1e293b",
             }}
           />
           <Legend
-            wrapperStyle={{ fontSize: "11px", paddingTop: "8px" }}
+            wrapperStyle={{ fontSize: "11px", paddingTop: "8px", color: isDark ? "#94a3b8" : "#64748b" }}
           />
           {escalationPoint !== null && (
             <ReferenceLine
               x={`${escalationPoint}m`}
-              stroke="#ff073a"
+              stroke="#ff2a6d"
               strokeDasharray="4 4"
               label={{
                 value: "Escalation",
                 position: "top",
-                fill: "#ff073a",
+                fill: "#ff2a6d",
                 fontSize: 11,
               }}
             />
@@ -78,28 +84,28 @@ export function DigitalTwinChart({
           <Line
             type="monotone"
             dataKey="Heart Rate"
-            stroke="#ff6b00"
+            stroke="#ff6ac1"
             strokeWidth={2.5}
             dot={false}
           />
           <Line
             type="monotone"
             dataKey="BP Systolic"
-            stroke="#00d4ff"
+            stroke="#00f0ff"
             strokeWidth={2.5}
             dot={false}
           />
           <Line
             type="monotone"
             dataKey="SpO2"
-            stroke="#39ff14"
+            stroke="#05ffa1"
             strokeWidth={2.5}
             dot={false}
           />
           <Line
             type="monotone"
             dataKey="Risk Score"
-            stroke="#ff073a"
+            stroke="#ff2a6d"
             strokeWidth={2.5}
             strokeDasharray="5 5"
             dot={false}

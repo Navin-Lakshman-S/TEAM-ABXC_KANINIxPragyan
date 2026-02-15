@@ -30,15 +30,15 @@ export function ShapChart({ factors }: ShapChartProps) {
                 <div
                   className={`h-full rounded-full transition-all duration-700 group-hover:brightness-110 ${
                     isUp
-                      ? "bg-gradient-to-r from-[#ff073a] to-[#ff2d78] shadow-inner"
-                      : "bg-gradient-to-r from-[#00ff87] to-[#39ff14] shadow-inner"
+                      ? "bg-gradient-to-r from-[#ff2a6d] to-[#ff6ac1] shadow-inner"
+                      : "bg-gradient-to-r from-[#05ffa1] to-[#00f0ff] shadow-inner"
                   }`}
                   style={{ width: `${widthPct}%` }}
                 />
               </div>
               <span
                 className={`text-xs font-mono w-16 text-right font-medium ${
-                  isUp ? "text-[#ff073a]" : "text-[#39ff14]"
+                  isUp ? "text-[#ff2a6d]" : "text-[#05ffa1]"
                 }`}
               >
                 {isUp ? "▲" : "▼"} {factor.impact.toFixed(3)}

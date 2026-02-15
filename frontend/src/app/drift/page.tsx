@@ -37,19 +37,28 @@ import {
   Cell,
 } from "recharts";
 import { useI18n } from "@/lib/i18n";
+import { useTheme } from "@/lib/theme";
 
-const tooltipStyle = {
-  contentStyle: {
-    backgroundColor: "#0f172a",
-    border: "1px solid rgba(255,255,255,0.1)",
-    borderRadius: "12px",
-    color: "#e2e8f0",
-    fontSize: "12px",
-  },
-};
+function getDriftTooltipStyle(isDark: boolean) {
+  return {
+    contentStyle: {
+      backgroundColor: isDark ? "rgba(15, 23, 42, 0.95)" : "rgba(255, 255, 255, 0.95)",
+      border: isDark ? "1px solid rgba(255,255,255,0.1)" : "1px solid rgba(0,0,0,0.08)",
+      borderRadius: "12px",
+      color: isDark ? "#e2e8f0" : "#1e293b",
+      fontSize: "12px",
+      backdropFilter: "blur(12px)",
+    },
+  };
+}
 
 export default function DriftPage() {
   const { t } = useI18n();
+  const { isDark } = useTheme();
+  const tooltipStyle = getDriftTooltipStyle(isDark);
+  const axisColor = isDark ? "#64748b" : "#475569";
+  const axisLineColor = isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.08)";
+  const tickColor = isDark ? "#94a3b8" : "#64748b";
   const [health, setHealth] = useState<ModelHealthResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [retraining, setRetraining] = useState(false);
@@ -125,7 +134,7 @@ export default function DriftPage() {
     feature: f.feature.replace(/_/g, " "),
     ks: f.ks_statistic,
     threshold: 0.15,
-    fill: f.drift_detected ? "#f43f5e" : "#06b6d4",
+    fill: f.drift_detected ? "#ff2a6d" : "#00f0ff",
   }));
 
   const labelChartData = Object.entries(label_drift.training_distribution).map(([label, trainVal]) => ({
@@ -256,8 +265,8 @@ export default function DriftPage() {
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={featureChartData} layout="vertical" margin={{ left: 20 }}>
-                <XAxis type="number" domain={[0, 0.5]} tick={{ fill: "#94a3b8", fontSize: 11 }} axisLine={{ stroke: "rgba(255,255,255,0.1)" }} />
-                <YAxis type="category" dataKey="feature" tick={{ fill: "#94a3b8", fontSize: 11 }} axisLine={{ stroke: "rgba(255,255,255,0.1)" }} width={90} />
+                <XAxis type="number" domain={[0, 0.5]} tick={{ fill: tickColor, fontSize: 11 }} axisLine={{ stroke: axisLineColor }} />
+                <YAxis type="category" dataKey="feature" tick={{ fill: tickColor, fontSize: 11 }} axisLine={{ stroke: axisLineColor }} width={90} />
                 <Tooltip {...tooltipStyle} />
                 <Bar dataKey="ks" radius={[0, 6, 6, 0]} barSize={18}>
                   {featureChartData.map((entry, index) => (
@@ -284,11 +293,11 @@ export default function DriftPage() {
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <RadarChart data={radarData}>
-                <PolarGrid stroke="rgba(255,255,255,0.1)" />
-                <PolarAngleAxis dataKey="feature" tick={{ fill: "#94a3b8", fontSize: 10 }} />
-                <PolarRadiusAxis tick={{ fill: "#64748b", fontSize: 10 }} domain={[0, 50]} />
-                <Radar name="Drift %" dataKey="drift" stroke="#06b6d4" fill="#06b6d4" fillOpacity={0.2} />
-                <Radar name="Threshold" dataKey="threshold" stroke="#f43f5e" fill="none" strokeDasharray="5 5" />
+                <PolarGrid stroke={axisLineColor} />
+                <PolarAngleAxis dataKey="feature" tick={{ fill: tickColor, fontSize: 10 }} />
+                <PolarRadiusAxis tick={{ fill: axisColor, fontSize: 10 }} domain={[0, 50]} />
+                <Radar name="Drift %" dataKey="drift" stroke="#bf5af2" fill="#bf5af2" fillOpacity={0.2} />
+                <Radar name="Threshold" dataKey="threshold" stroke="#ff2a6d" fill="none" strokeDasharray="5 5" />
                 <Tooltip {...tooltipStyle} />
               </RadarChart>
             </ResponsiveContainer>
@@ -311,17 +320,17 @@ export default function DriftPage() {
           <div className="h-52">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={labelChartData}>
-                <XAxis dataKey="label" tick={{ fill: "#94a3b8", fontSize: 11 }} axisLine={{ stroke: "rgba(255,255,255,0.1)" }} />
-                <YAxis tick={{ fill: "#94a3b8", fontSize: 11 }} axisLine={{ stroke: "rgba(255,255,255,0.1)" }} unit="%" />
+                <XAxis dataKey="label" tick={{ fill: tickColor, fontSize: 11 }} axisLine={{ stroke: axisLineColor }} />
+                <YAxis tick={{ fill: tickColor, fontSize: 11 }} axisLine={{ stroke: axisLineColor }} unit="%" />
                 <Tooltip {...tooltipStyle} />
-                <Bar dataKey="training" name="Training" fill="#6366f1" radius={[4, 4, 0, 0]} barSize={20} />
-                <Bar dataKey="current" name="Current" fill="#06b6d4" radius={[4, 4, 0, 0]} barSize={20} />
+                <Bar dataKey="training" name="Training" fill="#bf5af2" radius={[4, 4, 0, 0]} barSize={20} />
+                <Bar dataKey="current" name="Current" fill="#00f0ff" radius={[4, 4, 0, 0]} barSize={20} />
               </BarChart>
             </ResponsiveContainer>
           </div>
           <div className="flex items-center gap-4 mt-3 text-xs text-slate-400">
-            <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-full bg-indigo-500 inline-block" /> Training</span>
-            <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-full bg-cyan-500 inline-block" /> Current</span>
+            <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-full bg-purple-500 inline-block" /> Training</span>
+            <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-full bg-cyan-400 inline-block" /> Current</span>
           </div>
         </div>
 

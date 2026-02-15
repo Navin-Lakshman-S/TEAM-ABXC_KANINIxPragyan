@@ -12,6 +12,7 @@ import {
   RefreshCw,
 } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
+import { useTheme } from "@/lib/theme";
 import {
   BarChart,
   Bar,
@@ -28,21 +29,45 @@ import {
   Radar,
 } from "recharts";
 
-const tooltipStyle = {
-  backgroundColor: "rgba(255,255,255,0.95)",
-  backdropFilter: "blur(8px)",
-  border: "1px solid #e2e8f0",
-  borderRadius: "12px",
-  fontSize: "12px",
-  boxShadow: "0 8px 32px -8px rgba(0,0,0,0.12)",
-  padding: "8px 12px",
+/* ── Neon palette ── */
+const NEON = {
+  magenta: "#f72585",
+  deepPurple: "#7209b7",
+  electricBlue: "#4361ee",
+  skyBlue: "#4cc9f0",
+  mint: "#06d6a0",
+  gold: "#ffd166",
+  coral: "#ef476f",
+  aqua: "#00f5d4",
+  lime: "#b5e48c",
+  lavender: "#c77dff",
 };
+
+function getTooltipStyle(isDark: boolean) {
+  return {
+    backgroundColor: isDark ? "rgba(15,23,42,0.92)" : "rgba(255,255,255,0.95)",
+    backdropFilter: "blur(12px)",
+    border: `1px solid ${isDark ? "rgba(99,102,241,0.25)" : "#e2e8f0"}`,
+    borderRadius: "12px",
+    fontSize: "12px",
+    boxShadow: isDark
+      ? "0 8px 32px -8px rgba(0,0,0,0.5)"
+      : "0 8px 32px -8px rgba(0,0,0,0.12)",
+    padding: "8px 12px",
+    color: isDark ? "#e2e8f0" : "#1e293b",
+  };
+}
 
 export default function FairnessPage() {
   const { t } = useI18n();
+  const { isDark } = useTheme();
   const [data, setData] = useState<FairnessResult | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const axisColor = isDark ? "#64748b" : "#94a3b8";
+  const gridColor = isDark ? "rgba(148,163,184,0.12)" : "#e2e8f0";
+  const legendColor = isDark ? "#94a3b8" : "#64748b";
 
   const load = () => {
     setLoading(true);
@@ -89,18 +114,40 @@ export default function FairnessPage() {
     "High Risk Rate": +(g.high_risk_rate * 100).toFixed(1),
   }));
 
-  const ageAccData = data.age_analysis.map((g) => ({
-    group: g.group,
-    Accuracy: +(g.accuracy * 100).toFixed(1),
-    "High Risk Rate": +(g.high_risk_rate * 100).toFixed(1),
-  }));
+  const ageAccData = data.age_analysis.map((g) => {
+    const total = (g.risk_distribution.Low || 0) + (g.risk_distribution.Medium || 0) + (g.risk_distribution.High || 0);
+    return {
+      group: g.group,
+      Accuracy: +(g.accuracy * 100).toFixed(1),
+      "High Risk %": +(g.high_risk_rate * 100).toFixed(1),
+      "Low %": total > 0 ? +((g.risk_distribution.Low || 0) / total * 100).toFixed(1) : 0,
+      "Med %": total > 0 ? +((g.risk_distribution.Medium || 0) / total * 100).toFixed(1) : 0,
+      Samples: total,
+    };
+  });
 
-  const genderDist = data.gender_analysis.map((g) => ({
-    group: g.group,
-    Low: g.risk_distribution.Low || 0,
-    Medium: g.risk_distribution.Medium || 0,
-    High: g.risk_distribution.High || 0,
-  }));
+  // Gender risk distribution for radar view
+  const genderRadarData = ["Low", "Medium", "High"].map((level) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const entry: any = { risk: level };
+    data.gender_analysis.forEach((g) => {
+      const total = (g.risk_distribution.Low || 0) + (g.risk_distribution.Medium || 0) + (g.risk_distribution.High || 0);
+      entry[g.group] = total > 0 ? +((g.risk_distribution[level] || 0) / total * 100).toFixed(1) : 0;
+    });
+    return entry;
+  });
+
+  // Age group risk profile (percentage-based)
+  const ageRiskProfile = data.age_analysis.map((g) => {
+    const total = (g.risk_distribution.Low || 0) + (g.risk_distribution.Medium || 0) + (g.risk_distribution.High || 0);
+    return {
+      group: g.group,
+      "Low %": total > 0 ? +((g.risk_distribution.Low || 0) / total * 100).toFixed(1) : 0,
+      "Medium %": total > 0 ? +((g.risk_distribution.Medium || 0) / total * 100).toFixed(1) : 0,
+      "High %": total > 0 ? +((g.risk_distribution.High || 0) / total * 100).toFixed(1) : 0,
+      samples: total,
+    };
+  });
 
   // Radar chart data for fairness metrics
   const genderDI = data.disparate_impact?.gender;
@@ -111,6 +158,8 @@ export default function FairnessPage() {
     (genderDI?.fair ?? true) &&
     (genderDP?.fair ?? true) &&
     (genderEO?.fair ?? true);
+
+  const tooltipStyle = getTooltipStyle(isDark);
 
   return (
     <div className="space-y-6 max-w-6xl mx-auto">
@@ -163,9 +212,11 @@ export default function FairnessPage() {
         </div>
         <div className="text-right">
           <p className="text-2xl font-bold text-white">{(data.overall_accuracy * 100).toFixed(1)}%</p>
-          <p className="text-[11px] text-slate-500">Overall Accuracy</p>
+          <p className="text-[11px] text-slate-500">Test-Set Accuracy</p>
         </div>
       </div>
+
+
 
       {/* Fairness Metric Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 stagger">
@@ -208,13 +259,13 @@ export default function FairnessPage() {
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={genderAccData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                <XAxis dataKey="group" stroke="#94a3b8" fontSize={12} tickLine={false} axisLine={false} />
-                <YAxis stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} domain={[0, 100]} unit="%" />
+                <CartesianGrid strokeDasharray="3 3" stroke={gridColor} />
+                <XAxis dataKey="group" stroke={axisColor} fontSize={12} tickLine={false} axisLine={false} />
+                <YAxis stroke={axisColor} fontSize={11} tickLine={false} axisLine={false} domain={['dataMin - 5', 'dataMax + 3']} unit="%" />
                 <Tooltip contentStyle={tooltipStyle} />
-                <Legend wrapperStyle={{ fontSize: "11px", paddingTop: "8px" }} />
-                <Bar dataKey="Accuracy" fill="#7b2dff" radius={[6, 6, 0, 0]} barSize={28} />
-                <Bar dataKey="High Risk Rate" fill="#ff073a" radius={[6, 6, 0, 0]} barSize={28} />
+                <Legend wrapperStyle={{ fontSize: "11px", paddingTop: "8px", color: legendColor }} />
+                <Bar dataKey="Accuracy" fill={NEON.electricBlue} radius={[6, 6, 0, 0]} barSize={32} />
+                <Bar dataKey="High Risk Rate" fill={NEON.coral} radius={[6, 6, 0, 0]} barSize={32} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -226,37 +277,71 @@ export default function FairnessPage() {
           </h3>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={genderDist}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                <XAxis dataKey="group" stroke="#94a3b8" fontSize={12} tickLine={false} axisLine={false} />
-                <YAxis stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} />
+              <RadarChart data={genderRadarData}>
+                <PolarGrid stroke={gridColor} />
+                <PolarAngleAxis dataKey="risk" fontSize={12} stroke={axisColor} />
+                <PolarRadiusAxis fontSize={10} stroke={axisColor} domain={[0, 'auto']} />
+                {data.gender_analysis.map((g, i) => {
+                  const colors = [NEON.skyBlue, NEON.magenta, NEON.mint, NEON.gold];
+                  return (
+                    <Radar
+                      key={g.group}
+                      name={g.group}
+                      dataKey={g.group}
+                      stroke={colors[i % colors.length]}
+                      fill={colors[i % colors.length]}
+                      fillOpacity={0.2}
+                      strokeWidth={2}
+                    />
+                  );
+                })}
+                <Legend wrapperStyle={{ fontSize: "11px", paddingTop: "12px", color: legendColor }} />
                 <Tooltip contentStyle={tooltipStyle} />
-                <Legend wrapperStyle={{ fontSize: "11px", paddingTop: "8px" }} />
-                <Bar dataKey="Low" stackId="a" fill="#39ff14" radius={[0, 0, 0, 0]} />
-                <Bar dataKey="Medium" stackId="a" fill="#ffdd00" radius={[0, 0, 0, 0]} />
-                <Bar dataKey="High" stackId="a" fill="#ff073a" radius={[6, 6, 0, 0]} />
-              </BarChart>
+              </RadarChart>
             </ResponsiveContainer>
           </div>
         </div>
       </div>
 
-      {/* Age Group Analysis */}
+      {/* Age Group Analysis — Full Width with more metrics */}
       <div className="glass-card card-hover rounded-2xl p-6 animate-fade-up">
         <h3 className="text-sm font-semibold text-slate-200 mb-5 flex items-center gap-2">
-          <Users className="w-4 h-4 text-violet-500" /> Accuracy & High-Risk Rate by Age Group
+          <Users className="w-4 h-4 text-violet-500" /> Age Group — Accuracy, Risk Rates &amp; Distribution
+        </h3>
+        <div className="h-80">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={ageAccData} barGap={2}>
+              <CartesianGrid strokeDasharray="3 3" stroke={gridColor} />
+              <XAxis dataKey="group" stroke={axisColor} fontSize={12} tickLine={false} axisLine={false} />
+              <YAxis stroke={axisColor} fontSize={11} tickLine={false} axisLine={false} domain={[0, 100]} unit="%" />
+              <Tooltip contentStyle={tooltipStyle} />
+              <Legend wrapperStyle={{ fontSize: "11px", paddingTop: "8px", color: legendColor }} />
+              <Bar dataKey="Accuracy" fill={NEON.electricBlue} radius={[4, 4, 0, 0]} barSize={16} />
+              <Bar dataKey="High Risk %" fill={NEON.magenta} radius={[4, 4, 0, 0]} barSize={16} />
+              <Bar dataKey="Low %" fill={NEON.mint} radius={[4, 4, 0, 0]} barSize={16} />
+              <Bar dataKey="Med %" fill={NEON.gold} radius={[4, 4, 0, 0]} barSize={16} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* Age Risk Profile — separate view */}
+      <div className="glass-card card-hover rounded-2xl p-6 animate-fade-up">
+        <h3 className="text-sm font-semibold text-slate-200 mb-5 flex items-center gap-2">
+          <BarChart3 className="w-4 h-4 text-violet-500" /> Age Group Risk Profile (%)
         </h3>
         <div className="h-72">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={ageAccData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-              <XAxis dataKey="group" stroke="#94a3b8" fontSize={12} tickLine={false} axisLine={false} />
-              <YAxis stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} domain={[0, 100]} unit="%" />
+            <RadarChart data={ageRiskProfile}>
+              <PolarGrid stroke={gridColor} />
+              <PolarAngleAxis dataKey="group" fontSize={12} stroke={axisColor} />
+              <PolarRadiusAxis fontSize={10} stroke={axisColor} domain={[0, 'auto']} />
+              <Radar name="Low %" dataKey="Low %" stroke={NEON.mint} fill={NEON.mint} fillOpacity={0.2} strokeWidth={2} />
+              <Radar name="Medium %" dataKey="Medium %" stroke={NEON.gold} fill={NEON.gold} fillOpacity={0.2} strokeWidth={2} />
+              <Radar name="High %" dataKey="High %" stroke={NEON.coral} fill={NEON.coral} fillOpacity={0.15} strokeWidth={2} />
+              <Legend wrapperStyle={{ fontSize: "11px", paddingTop: "12px", color: legendColor }} />
               <Tooltip contentStyle={tooltipStyle} />
-              <Legend wrapperStyle={{ fontSize: "11px", paddingTop: "8px" }} />
-              <Bar dataKey="Accuracy" fill="#00d4ff" radius={[6, 6, 0, 0]} barSize={24} />
-              <Bar dataKey="High Risk Rate" fill="#ff6b00" radius={[6, 6, 0, 0]} barSize={24} />
-            </BarChart>
+            </RadarChart>
           </ResponsiveContainer>
         </div>
       </div>
@@ -276,12 +361,12 @@ export default function FairnessPage() {
                   FPR: +(m.fpr * 100).toFixed(1),
                 }))}
               >
-                <PolarGrid stroke="#e2e8f0" />
-                <PolarAngleAxis dataKey="group" fontSize={12} stroke="#64748b" />
-                <PolarRadiusAxis fontSize={10} stroke="#94a3b8" domain={[0, 100]} />
-                <Radar name="True Positive Rate" dataKey="TPR" stroke="#00f0ff" fill="#00f0ff" fillOpacity={0.25} strokeWidth={2} />
-                <Radar name="False Positive Rate" dataKey="FPR" stroke="#ff2d78" fill="#ff2d78" fillOpacity={0.15} strokeWidth={2} />
-                <Legend wrapperStyle={{ fontSize: "11px", paddingTop: "12px" }} />
+                <PolarGrid stroke={gridColor} />
+                <PolarAngleAxis dataKey="group" fontSize={12} stroke={axisColor} />
+                <PolarRadiusAxis fontSize={10} stroke={axisColor} domain={[0, 100]} />
+                <Radar name="True Positive Rate" dataKey="TPR" stroke={NEON.aqua} fill={NEON.aqua} fillOpacity={0.25} strokeWidth={2} />
+                <Radar name="False Positive Rate" dataKey="FPR" stroke={NEON.magenta} fill={NEON.magenta} fillOpacity={0.15} strokeWidth={2} />
+                <Legend wrapperStyle={{ fontSize: "11px", paddingTop: "12px", color: legendColor }} />
                 <Tooltip contentStyle={tooltipStyle} />
               </RadarChart>
             </ResponsiveContainer>

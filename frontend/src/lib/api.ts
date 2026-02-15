@@ -226,18 +226,6 @@ export async function getModelFairness(): Promise<FairnessResult> {
   return res.json();
 }
 
-export function createVitalsSocket(
-  patientId: string,
-  baseHr = 75,
-  baseSpo2 = 97,
-  riskLevel = "Low"
-): WebSocket {
-  const wsBase = API_BASE.replace("http", "ws");
-  return new WebSocket(
-    `${wsBase}/ws/vitals/${patientId}?base_hr=${baseHr}&base_spo2=${baseSpo2}&risk_level=${riskLevel}`
-  );
-}
-
 /* ═══════════════════════════════════════════════════════════════
    Hospital / Doctor / Assignment Management
    ═══════════════════════════════════════════════════════════════ */

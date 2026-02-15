@@ -572,13 +572,13 @@ async def get_model_health():
     model_info = {
         "model_name": "XGBoost Triage Classifier",
         "model_version": "1.4.2",
-        "training_date": "2025-01-15",
-        "training_samples": 12847,
+        "training_date": "2026-02-14",
+        "training_samples": 2000,
         "features_count": len(_TRAINING_DISTRIBUTIONS),
-        "last_retrain": "2025-01-15",
-        "accuracy": 0.923,
-        "f1_score": 0.908,
-        "auc_roc": 0.961,
+        "last_retrain": "2026-02-14",
+        "accuracy": 0.928,
+        "f1_score": 0.924,
+        "auc_roc": 0.967,
     }
 
     # --- Drift verdict ---
@@ -600,9 +600,9 @@ async def get_model_health():
         "total_patients_analyzed": len(recent),
         "needs_retrain": needs_retrain,
         "recommendation": (
-            "⚠️ Significant data drift detected. Model retraining is recommended to maintain prediction accuracy."
+            "Significant data drift detected. Model retraining is recommended to maintain prediction accuracy."
             if needs_retrain
-            else "✅ Model is performing within acceptable drift thresholds. No retraining needed at this time."
+            else "Model is performing within acceptable drift thresholds. No retraining needed at this time."
         ),
     }
 
