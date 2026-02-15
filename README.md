@@ -317,7 +317,7 @@ VIGIL's model is trained on **2,500 synthetic patients** generated from **14 cli
 
 | Metric | Score |
 |--------|-------|
-| **Overall Accuracy** | 99.8% |
+| **Overall Accuracy** | 96.4% |
 | **High Risk** | Precision: 1.000 · Recall: 1.000 · F1: 1.000 |
 | **Medium Risk** | Precision: 0.994 · Recall: 1.000 · F1: 0.997 |
 | **Low Risk** | Precision: 1.000 · Recall: 0.995 · F1: 0.997 |
