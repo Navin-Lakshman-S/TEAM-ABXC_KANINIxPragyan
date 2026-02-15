@@ -65,16 +65,16 @@ Vigil follows a clean three-layer architecture:
 ```
 ┌──────────────────────────────────────────────────────────────┐
 │                      🖥️  FRONTEND                            │
-│  Next.js 16 · React 19 · TypeScript · Tailwind CSS 4        │
+│  Next.js 16 · React 19 · TypeScript · Tailwind CSS 4         │
 │  Recharts · Lucide Icons · Spline 3D · Web Speech API        │
 │                                                              │
 │  8 Pages: Triage | Dashboard | Patients | Resources |        │
 │           Wearable | Fairness | Model Health | Management    │
-│  i18n: EN | ES | HI | TA                                    │
+│  i18n: EN | ES | HI | TA                                     │
 ├──────────────────────────────────────────────────────────────┤
-│                 REST API (JSON) + WebSocket                   │
+│                 REST API (JSON) + WebSocket                  │
 ├──────────────────────────────────────────────────────────────┤
-│                      ⚙️  BACKEND                              │
+│                      ⚙️  BACKEND                             │
 │  FastAPI · Python 3.10+ · Uvicorn · Pydantic                 │
 │                                                              │
 │  AI Engine:          Services:                               │
@@ -86,7 +86,7 @@ Vigil follows a clean three-layer architecture:
 │  ├─ Digital Twin                                             │
 │  └─ Fairness                                                 │
 ├──────────────────────────────────────────────────────────────┤
-│                      💾  DATA LAYER                           │
+│                      💾  DATA LAYER                          │
 │  Synthetic Generator (14 archetypes, 2,500 patients)         │
 │  Model Artifacts: .joblib (model, features, encoder)         │
 │  In-memory Patient Store (pluggable to Supabase/Postgres)    │
