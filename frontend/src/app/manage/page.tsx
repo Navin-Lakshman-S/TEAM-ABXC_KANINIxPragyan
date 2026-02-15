@@ -219,7 +219,7 @@ function HospitalTab() {
             <div>
               <label className="block text-xs text-slate-500 mb-1">Hospital Type</label>
               <select value={hType} onChange={e => setHType(e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 outline-none transition-all hover:border-white/20">
+                className="w-full bg-[var(--input-bg)] border border-[var(--input-border)] rounded-xl px-3 py-2 text-sm text-[var(--input-text)] focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 outline-none transition-all hover:border-white/20">
                 {HOSPITAL_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
               </select>
             </div>
@@ -420,7 +420,7 @@ function DoctorTab() {
             <div>
               <label className="block text-xs text-slate-500 mb-1">Specialization</label>
               <select value={spec} onChange={e => setSpec(e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:ring-2 focus:ring-violet-500/30 focus:border-violet-400 outline-none transition-all hover:border-white/20">
+                className="w-full bg-[var(--input-bg)] border border-[var(--input-border)] rounded-xl px-3 py-2 text-sm text-[var(--input-text)] focus:ring-2 focus:ring-violet-500/30 focus:border-violet-400 outline-none transition-all hover:border-white/20">
                 {SPECIALIZATIONS.map(s => <option key={s} value={s}>{s}</option>)}
               </select>
             </div>
@@ -449,7 +449,7 @@ function DoctorTab() {
               <p className="text-xs text-amber-400 bg-amber-500/10 border border-amber-500/20 rounded-lg px-3 py-2">Register a hospital first in the Hospital Infrastructure tab.</p>
             ) : (
               <select value={hospId} onChange={e => setHospId(e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:ring-2 focus:ring-violet-500/30 focus:border-violet-400 outline-none transition-all hover:border-white/20">
+                className="w-full bg-[var(--input-bg)] border border-[var(--input-border)] rounded-xl px-3 py-2 text-sm text-[var(--input-text)] focus:ring-2 focus:ring-violet-500/30 focus:border-violet-400 outline-none transition-all hover:border-white/20">
                 <option value="">— Select Hospital —</option>
                 {hospitals.map(h => <option key={h.id} value={h.id}>{h.name} ({h.id})</option>)}
               </select>
@@ -653,7 +653,7 @@ function AssignmentTab() {
                     <p className="text-xs text-amber-400 bg-amber-500/10 border border-amber-500/20 rounded-lg px-3 py-2">All patients are assigned. Triage new patients first.</p>
                   ) : (
                     <select value={selPatient} onChange={e => setSelPatient(e.target.value)} required
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-white focus:ring-2 focus:ring-emerald-500/30 outline-none transition-all hover:border-white/20">
+                      className="w-full bg-[var(--input-bg)] border border-[var(--input-border)] rounded-xl px-3 py-2.5 text-sm text-[var(--input-text)] focus:ring-2 focus:ring-emerald-500/30 outline-none transition-all hover:border-white/20">
                       <option value="">— Select Patient —</option>
                       {unassignedPatients.map(p => (
                         <option key={p.patient_id} value={p.patient_id}>
@@ -687,7 +687,7 @@ function AssignmentTab() {
                   <div>
                     <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider">2. Select Hospital</label>
                     <select value={selHospital} onChange={e => { setSelHospital(e.target.value); setSelDoctor(""); }} required
-                      className="w-full mt-1 bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-white focus:ring-2 focus:ring-emerald-500/30 outline-none transition-all hover:border-white/20">
+                      className="w-full mt-1 bg-[var(--input-bg)] border border-[var(--input-border)] rounded-xl px-3 py-2.5 text-sm text-[var(--input-text)] focus:ring-2 focus:ring-emerald-500/30 outline-none transition-all hover:border-white/20">
                       <option value="">— Select Hospital —</option>
                       {hospitals.map(h => <option key={h.id} value={h.id}>{h.name}</option>)}
                     </select>
@@ -695,7 +695,7 @@ function AssignmentTab() {
                   <div>
                     <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider">3. Select Doctor</label>
                     <select value={selDoctor} onChange={e => setSelDoctor(e.target.value)} required
-                      className="w-full mt-1 bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-white focus:ring-2 focus:ring-emerald-500/30 outline-none transition-all hover:border-white/20">
+                      className="w-full mt-1 bg-[var(--input-bg)] border border-[var(--input-border)] rounded-xl px-3 py-2.5 text-sm text-[var(--input-text)] focus:ring-2 focus:ring-emerald-500/30 outline-none transition-all hover:border-white/20">
                       <option value="">— Select Doctor —</option>
                       {filteredDoctors.map(d => (
                         <option key={d.id} value={d.id} disabled={d.current_patients >= d.max_patients}>
@@ -711,14 +711,14 @@ function AssignmentTab() {
                 <div>
                   <label className="block text-xs text-slate-500 mb-1">Department</label>
                   <select value={selDept} onChange={e => setSelDept(e.target.value)}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:ring-2 focus:ring-emerald-500/30 outline-none transition-all hover:border-white/20">
+                    className="w-full bg-[var(--input-bg)] border border-[var(--input-border)] rounded-xl px-3 py-2 text-sm text-[var(--input-text)] focus:ring-2 focus:ring-emerald-500/30 outline-none transition-all hover:border-white/20">
                     {DEPT_OPTIONS.map(d => <option key={d} value={d}>{d}</option>)}
                   </select>
                 </div>
                 <div>
                   <label className="block text-xs text-slate-500 mb-1">Priority</label>
                   <select value={priority} onChange={e => setPriority(e.target.value)}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:ring-2 focus:ring-emerald-500/30 outline-none transition-all hover:border-white/20">
+                    className="w-full bg-[var(--input-bg)] border border-[var(--input-border)] rounded-xl px-3 py-2 text-sm text-[var(--input-text)] focus:ring-2 focus:ring-emerald-500/30 outline-none transition-all hover:border-white/20">
                     <option value="Urgent">🔴 Urgent</option>
                     <option value="High">🟠 High</option>
                     <option value="Normal">🟢 Normal</option>

@@ -329,6 +329,19 @@ body {
   color: var(--foreground);
 }
 
+/* Fix native <select>/<option> dropdown text visibility in both themes */
+select option {
+  background: var(--background);
+  color: var(--foreground);
+}
+.light select {
+  color: var(--input-text);
+}
+.light select option {
+  background: #f8fafc;
+  color: #1e293b;
+}
+
 /* Subtle noise texture on main bg */
 .noise-bg::before {
   content: "";

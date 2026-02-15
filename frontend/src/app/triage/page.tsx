@@ -541,7 +541,7 @@ export default function TriagePage() {
                 <select
                   value={form.gender}
                   onChange={(e) => updateField("gender", e.target.value)}
-                  className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 outline-none transition-all hover:border-white/20"
+                  className="w-full bg-[var(--input-bg)] border border-[var(--input-border)] rounded-xl px-3 py-2 text-sm text-[var(--input-text)] focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 outline-none transition-all hover:border-white/20"
                 >
                   {GENDERS.map((g) => (
                     <option key={g} value={g}>
@@ -754,7 +754,7 @@ export default function TriagePage() {
                   onChange={(e) =>
                     updateField("insurance_provider", e.target.value)
                   }
-                  className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 outline-none transition-all hover:border-white/20"
+                  className="w-full bg-[var(--input-bg)] border border-[var(--input-border)] rounded-xl px-3 py-2 text-sm text-[var(--input-text)] focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 outline-none transition-all hover:border-white/20"
                 >
                   {INSURERS.map((i) => (
                     <option key={i} value={i}>
