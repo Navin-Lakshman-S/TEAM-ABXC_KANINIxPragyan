@@ -34,31 +34,31 @@ Everything is wrapped in a beautiful, dark-themed glassmorphism UI that supports
 
 ---
 
-## ✨ Features at a Glance
+## Features at a Glance
 
 | Feature | What It Does |
 |---------|-------------|
-| 🤖 **AI Risk Classification** | XGBoost classifier with 99.8% accuracy across High/Medium/Low risk levels |
-| 🔍 **SHAP Explainability** | Shows the top 8 factors driving each prediction with visual impact bars |
-| 🛡️ **Critical Override** | Hard-coded safety net — if vitals hit dangerous thresholds, the system immediately flags High risk regardless of ML output |
-| 🏥 **Smart Department Routing** | Weighted scoring across 8 departments (Emergency, Cardiology, Neurology, and more) |
-| ⚡ **Deterioration Detection** | Detects pre-shock, pre-stroke, and pre-sepsis patterns with urgency scores |
-| 🧬 **Digital Twin Simulation** | Projects patient vitals over 180 minutes to predict deterioration windows |
-| 💰 **Insurance Risk Analysis** | Cross-references insurer response times with digital twin to flag dangerous delays |
-| 📊 **Live Dashboard** | Real-time charts for risk distribution, department load, triage activity, and model metrics |
-| ⌚ **Wearable Monitoring** | WebSocket-powered live vitals stream simulating smartwatch data |
-| ⚖️ **Bias & Fairness Audit** | Demographic parity, disparate impact ratio, and equalized odds analysis |
-| 🧠 **Model Health / Data Drift** | KS-test per feature, PSI label drift, radar visualization, one-click retrain trigger |
-| 📋 **EHR/EMR Upload** | Upload PDF or text clinical documents — auto-extracts patient data via NLP |
-| 🎤 **Voice Input** | Speak symptoms directly using the Web Speech API |
-| 🌐 **4-Language Support** | Full i18n: English, Spanish (Español), Hindi (हिन्दी), Tamil (தமிழ்) |
-| 🏗️ **Hospital Management** | CRUD for hospitals, doctors, and patient-doctor assignments with capacity tracking |
-| 🖨️ **Export & Print** | Download triage results as JSON or print-ready reports |
-| 🫀 **3D Body Viewer** | Interactive Spline 3D anatomical model embedded in the triage page |
+| **AI Risk Classification** | XGBoost classifier with 99.8% accuracy across High/Medium/Low risk levels |
+| **SHAP Explainability** | Shows the top 8 factors driving each prediction with visual impact bars |
+| **Critical Override** | Hard-coded safety net — if vitals hit dangerous thresholds, the system immediately flags High risk regardless of ML output |
+| **Smart Department Routing** | Weighted scoring across 8 departments (Emergency, Cardiology, Neurology, and more) |
+| **Deterioration Detection** | Detects pre-shock, pre-stroke, and pre-sepsis patterns with urgency scores |
+| **Digital Twin Simulation** | Projects patient vitals over 180 minutes to predict deterioration windows |
+| **Insurance Risk Analysis** | Cross-references insurer response times with digital twin to flag dangerous delays |
+| **Live Dashboard** | Real-time charts for risk distribution, department load, triage activity, and model metrics |
+| **Wearable Monitoring** | WebSocket-powered live vitals stream simulating smartwatch data |
+| **Bias & Fairness Audit** | Demographic parity, disparate impact ratio, and equalized odds analysis |
+| **Model Health / Data Drift** | KS-test per feature, PSI label drift, radar visualization, one-click retrain trigger |
+| **EHR/EMR Upload** | Upload PDF or text clinical documents — auto-extracts patient data via NLP |
+| **Voice Input** | Speak symptoms directly using the Web Speech API |
+| **4-Language Support** | Full i18n: English, Spanish (Español), Hindi (हिन्दी), Tamil (தமிழ்) |
+| **Hospital Management** | CRUD for hospitals, doctors, and patient-doctor assignments with capacity tracking |
+| **Export & Print** | Download triage results as JSON or print-ready reports |
+| **3D Body Viewer** | Interactive Spline 3D anatomical model embedded in the triage page |
 
 ---
 
-## 🏛️ Architecture Overview
+## Architecture Overview
 
 VIGIL follows a clean three-layer architecture:
 
@@ -95,7 +95,7 @@ VIGIL follows a clean three-layer architecture:
 
 ---
 
-## 🧪 The 8-Step Triage Pipeline
+## The 8-Step Triage Pipeline
 
 Every time a patient is submitted, VIGIL runs an **8-step AI pipeline** in under 200ms:
 
@@ -389,7 +389,7 @@ VIGIL uses a **Spatial Glassmorphism** dark theme inspired by futuristic medical
 - **Neon cyan accents** (`#00f2ff`) for highlights, borders, and interactive elements
 - **Neumorphic glow effects** on hover states
 - **Dark data tables** with subtle row highlighting
-- **Color-coded risk levels**: 🔴 High (rose), 🟡 Medium (amber), 🟢 Low (emerald)
+- **Color-coded risk levels**: 🔴 High (red), 🟡 Medium (amber), 🟢 Low (green)
 
 ---
 
