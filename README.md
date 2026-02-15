@@ -40,21 +40,21 @@ Everything is wrapped in a beautiful, dark-themed glassmorphism UI that supports
 |---------|-------------|
 | **AI Risk Classification** | XGBoost classifier with 99.8% accuracy across High/Medium/Low risk levels |
 | **SHAP Explainability** | Shows the top 8 factors driving each prediction with visual impact bars |
-| **Critical Override** | Hard-coded safety net — if vitals hit dangerous thresholds, the system immediately flags High risk regardless of ML output |
+| **Critical Override** | Hard-coded safety net if vitals hit dangerous thresholds, the system immediately flags High risk regardless of ML output |
 | **Smart Department Routing** | Weighted scoring across 8 departments (Emergency, Cardiology, Neurology, and more) |
 | **Deterioration Detection** | Detects pre-shock, pre-stroke, and pre-sepsis patterns with urgency scores |
+| **Digital Twin** | Interactive Spline 3D anatomical model embedded in the triage page indicating the escalation and state of the patient|
 | **Digital Twin Simulation** | Projects patient vitals over 180 minutes to predict deterioration windows |
 | **Insurance Risk Analysis** | Cross-references insurer response times with digital twin to flag dangerous delays |
 | **Live Dashboard** | Real-time charts for risk distribution, department load, triage activity, and model metrics |
 | **Wearable Monitoring** | WebSocket-powered live vitals stream simulating smartwatch data |
 | **Bias & Fairness Audit** | Demographic parity, disparate impact ratio, and equalized odds analysis |
 | **Model Health / Data Drift** | KS-test per feature, PSI label drift, radar visualization, one-click retrain trigger |
-| **EHR/EMR Upload** | Upload PDF or text clinical documents — auto-extracts patient data via NLP |
+| **EHR/EMR Upload** | Upload PDF or text clinical documents auto-extracts patient data via NLP |
 | **Voice Input** | Speak symptoms directly using the Web Speech API |
-| **4-Language Support** | Full i18n: English, Spanish (Español), Hindi (हिन्दी), Tamil (தமிழ்) |
+| **3-Language Support** | Full i18n: English, Hindi (हिन्दी), Tamil (தமிழ்) |
 | **Hospital Management** | CRUD for hospitals, doctors, and patient-doctor assignments with capacity tracking |
 | **Export & Print** | Download triage results as JSON or print-ready reports |
-| **3D Body Viewer** | Interactive Spline 3D anatomical model embedded in the triage page |
 
 ---
 
@@ -411,8 +411,6 @@ Switch languages instantly from the sidebar — the entire UI updates in real-ti
 ##  Built With Determination
 
 Built as a hackathon project to showcase how AI can assist (not replace) healthcare professionals in making faster, more transparent, and fairer triage decisions.
-
-If you found this useful, give it a ⭐ — it means a lot!
 
 ---
 
