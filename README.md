@@ -20,7 +20,7 @@
 
 Imagine walking into a busy emergency room. Dozens of patients, each with different symptoms, histories, and urgency levels. How do you decide who gets seen first?
 
-**VIGIL** answers that question with AI. It's a full-stack healthcare triage system that takes a patient's vitals, symptoms, and medical history — and within milliseconds — returns:
+**VIGIL** answers that question with AI. It's a full-stack healthcare triage system that takes a patient's vitals, symptoms, and medical history and within milliseconds returns:
 
 - A **risk classification** (High / Medium / Low) powered by a trained XGBoost model
 - A **plain-English explanation** of *why* using SHAP explainability
