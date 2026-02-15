@@ -408,18 +408,7 @@ Switch languages instantly from the sidebar — the entire UI updates in real-ti
 ---
 
 
-##  Disclaimer
-
-VIGIL is a **demonstration and educational project**. It is **not** intended for real clinical use.
-
-- The ML model is trained on synthetic data, not real patient records
-- Clinical rules are simplified approximations
-- No regulatory approval (FDA, CE, etc.) has been obtained
-- Always consult qualified medical professionals for healthcare decisions
-
----
-
-##  Built With Love
+##  Built With Determination
 
 Built as a hackathon project to showcase how AI can assist (not replace) healthcare professionals in making faster, more transparent, and fairer triage decisions.
 
