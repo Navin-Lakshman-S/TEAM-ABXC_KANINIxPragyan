@@ -7,7 +7,7 @@
   <img src="https://img.shields.io/badge/Languages-4-purple?style=for-the-badge" alt="i18n" />
 </p>
 
-<h1 align="center">🏥 Vigil</h1>
+<h1 align="center">VIGIL</h1>
 <h3 align="center">AI-Powered Smart Patient Triage System</h3>
 
 <p align="center">
@@ -16,11 +16,11 @@
 
 ---
 
-## 🧭 What is Vigil?
+## What is VIGIL?
 
 Imagine walking into a busy emergency room. Dozens of patients, each with different symptoms, histories, and urgency levels. How do you decide who gets seen first?
 
-**Vigil** answers that question with AI. It's a full-stack healthcare triage system that takes a patient's vitals, symptoms, and medical history — and within milliseconds — returns:
+**VIGIL** answers that question with AI. It's a full-stack healthcare triage system that takes a patient's vitals, symptoms, and medical history — and within milliseconds — returns:
 
 - A **risk classification** (High / Medium / Low) powered by a trained XGBoost model
 - A **plain-English explanation** of *why* using SHAP explainability
@@ -60,7 +60,7 @@ Everything is wrapped in a beautiful, dark-themed glassmorphism UI that supports
 
 ## 🏛️ Architecture Overview
 
-Vigil follows a clean three-layer architecture:
+VIGIL follows a clean three-layer architecture:
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
@@ -97,7 +97,7 @@ Vigil follows a clean three-layer architecture:
 
 ## 🧪 The 8-Step Triage Pipeline
 
-Every time a patient is submitted, Vigil runs an **8-step AI pipeline** in under 200ms:
+Every time a patient is submitted, VIGIL runs an **8-step AI pipeline** in under 200ms:
 
 ```
 Patient Input
@@ -129,7 +129,7 @@ Patient Input
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Backend
 | Technology | Purpose |
@@ -159,7 +159,7 @@ Patient Input
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -210,7 +210,7 @@ npm install
 npx next dev --port 3000
 ```
 
-Open your browser at **http://localhost:3000** — you should see the Vigil dashboard.
+Open your browser at **http://localhost:3000** — you should see the VIGIL dashboard.
 
 ### 4. Try It Out!
 
@@ -222,7 +222,7 @@ Open your browser at **http://localhost:3000** — you should see the Vigil dash
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 vigil/
@@ -288,10 +288,10 @@ vigil/
 
 ---
 
-## 🤖 The ML Model
+## The ML Model
 
 ### Training Data
-Vigil's model is trained on **2,500 synthetic patients** generated from **14 clinical archetypes**:
+VIGIL's model is trained on **2,500 synthetic patients** generated from **14 clinical archetypes**:
 
 | Archetype | Risk Level | Example |
 |-----------|-----------|---------|
@@ -326,7 +326,7 @@ Vigil's model is trained on **2,500 synthetic patients** generated from **14 cli
 
 ---
 
-## 🌐 API Reference
+## API Reference
 
 The backend exposes **25+ REST endpoints** and **1 WebSocket endpoint**:
 
@@ -380,9 +380,9 @@ The backend exposes **25+ REST endpoints** and **1 WebSocket endpoint**:
 
 ---
 
-## 🎨 UI Design
+## UI Design
 
-Vigil uses a **Spatial Glassmorphism** dark theme inspired by futuristic medical interfaces:
+VIGIL uses a **Spatial Glassmorphism** dark theme inspired by futuristic medical interfaces:
 
 - **Deep dark background** (`#070b14`) with mesh gradient orbs (purple, blue, cyan)
 - **Frosted glass panels** — `rgba(255,255,255,0.04)` with `backdrop-filter: blur(16px)`
@@ -393,14 +393,13 @@ Vigil uses a **Spatial Glassmorphism** dark theme inspired by futuristic medical
 
 ---
 
-## 🌍 Internationalization
+##  Internationalization
 
-Every UI string in Vigil is translatable. Currently supported:
+Every UI string in VIGIL is translatable. Currently supported:
 
 | Language | Code | Coverage |
 |----------|------|----------|
 | 🇬🇧 English | `en` | 120+ keys |
-| 🇪🇸 Español (Spanish) | `es` | 120+ keys |
 | 🇮🇳 हिन्दी (Hindi) | `hi` | 120+ keys |
 | 🇮🇳 தமிழ் (Tamil) | `ta` | 120+ keys |
 
@@ -408,28 +407,10 @@ Switch languages instantly from the sidebar — the entire UI updates in real-ti
 
 ---
 
-## 📸 Generating Visual Diagrams
 
-This repo includes two ready-to-use prompts for AI image generators:
+##  Disclaimer
 
-| File | What It Generates |
-|------|-------------------|
-| [ARCHITECTURE_DIAGRAM_PROMPT.md](ARCHITECTURE_DIAGRAM_PROMPT.md) | System architecture showing all 3 layers, modules, and connections |
-| [FLOW_DIAGRAM_PROMPT.md](FLOW_DIAGRAM_PROMPT.md) | Patient triage flow from data entry through the 8-step AI pipeline to output |
-
-**How to use:**
-1. Open the prompt file
-2. Copy the prompt text
-3. Paste into your preferred AI image generator (Midjourney, DALL-E 3, Stable Diffusion, Flux, Ideogram, etc.)
-4. Generate your diagram!
-
-Each file includes both a **detailed version** (for high-quality generators) and a **simplified version** (for models with shorter prompt limits).
-
----
-
-## ⚠️ Disclaimer
-
-Vigil is a **demonstration and educational project**. It is **not** intended for real clinical use.
+VIGIL is a **demonstration and educational project**. It is **not** intended for real clinical use.
 
 - The ML model is trained on synthetic data, not real patient records
 - Clinical rules are simplified approximations
@@ -438,7 +419,7 @@ Vigil is a **demonstration and educational project**. It is **not** intended for
 
 ---
 
-## 🙌 Built With Love
+##  Built With Love
 
 Built as a hackathon project to showcase how AI can assist (not replace) healthcare professionals in making faster, more transparent, and fairer triage decisions.
 
@@ -447,5 +428,5 @@ If you found this useful, give it a ⭐ — it means a lot!
 ---
 
 <p align="center">
-  <strong>Vigil</strong> — Because every second counts in healthcare.
+  <strong>VIGIL</strong> — Because every second counts in healthcare.
 </p>
