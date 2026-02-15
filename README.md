@@ -93,8 +93,6 @@ Vigil follows a clean three-layer architecture:
 └──────────────────────────────────────────────────────────────┘
 ```
 
-> 💡 **Want visual diagrams?** Check out [ARCHITECTURE_DIAGRAM_PROMPT.md](ARCHITECTURE_DIAGRAM_PROMPT.md) and [FLOW_DIAGRAM_PROMPT.md](FLOW_DIAGRAM_PROMPT.md) — ready-to-use prompts you can paste into any AI image generator (Midjourney, DALL-E, Flux, etc.) to create stunning architecture and flow diagrams.
-
 ---
 
 ## 🧪 The 8-Step Triage Pipeline
