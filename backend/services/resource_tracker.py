@@ -174,3 +174,57 @@ def reset():
     global _state
     _state = None
     _init()
+
+
+def register_hospital(hospital_id: str, name: str, departments: list[str],
+                      total_beds: int = 0, ventilators: int = 0,
+                      monitors: int = 0, icu_beds: int = 0,
+                      distance_km: float = 5.0) -> None:
+    """
+    Register a hospital created via Hospital Management into the
+    resource tracker so it appears on the Resources page.
+    Distributes total infrastructure across the selected departments.
+    """
+    _init()
+    # Don't add duplicates
+    for h in _state["hospitals"]:
+        if h["hospital_id"] == hospital_id:
+            return
+
+    dept_count = max(len(departments), 1)
+    beds_per = total_beds // dept_count
+    vents_per = ventilators // dept_count
+    mons_per = monitors // dept_count
+    icu_per = icu_beds // dept_count
+
+    dept_map = {}
+    for i, dept in enumerate(departments):
+        # Give remainder to first department
+        extra_beds = total_beds % dept_count if i == 0 else 0
+        extra_vents = ventilators % dept_count if i == 0 else 0
+        b = beds_per + extra_beds
+        dept_map[dept] = {
+            "beds_total": b,
+            "beds_available": max(b - icu_per, 1),  # some beds occupied
+            "ventilators": vents_per + extra_vents,
+            "monitors": mons_per + (monitors % dept_count if i == 0 else 0),
+            "staff_on_duty": max(b // 3, 2),  # rough staffing estimate
+        }
+
+    _state["hospitals"].append({
+        "hospital_id": hospital_id,
+        "name": name,
+        "is_primary": False,
+        "distance_km": distance_km,
+        "departments": dept_map,
+    })
+
+
+def unregister_hospital(hospital_id: str) -> bool:
+    """Remove a hospital from the resource tracker."""
+    _init()
+    before = len(_state["hospitals"])
+    _state["hospitals"] = [
+        h for h in _state["hospitals"] if h["hospital_id"] != hospital_id
+    ]
+    return len(_state["hospitals"]) < before

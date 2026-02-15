@@ -314,6 +314,18 @@ async def create_hospital(body: dict):
         "created_at": datetime.now().isoformat(timespec="seconds"),
     }
     _hospital_store.append(hospital)
+
+    # Sync with resource tracker so it appears in Resources tab
+    resource_tracker.register_hospital(
+        hospital_id=hid,
+        name=hospital["name"],
+        departments=hospital["departments"],
+        total_beds=hospital["infrastructure"]["total_beds"],
+        ventilators=hospital["infrastructure"]["ventilators"],
+        monitors=hospital["infrastructure"]["monitors"],
+        icu_beds=hospital["infrastructure"]["icu_beds"],
+    )
+
     return hospital
 
 
@@ -338,6 +350,8 @@ async def delete_hospital(hospital_id: str):
     _hospital_store = [h for h in _hospital_store if h["id"] != hospital_id]
     if len(_hospital_store) == before:
         raise HTTPException(status_code=404, detail="Hospital not found")
+    # Also remove from resource tracker
+    resource_tracker.unregister_hospital(hospital_id)
     return {"status": "deleted", "id": hospital_id}
 
 
